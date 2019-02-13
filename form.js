@@ -1,4 +1,4 @@
-(function (global, $) {
+(function (global) {
 
     let Form = function (options) {
         return new Form.init(options);
@@ -123,4 +123,4 @@
     Form.init.prototype = Form.prototype;
     global.$F = global.Form = Form;
 
-}(window, jQuery));
+}(window));
