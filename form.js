@@ -160,7 +160,7 @@
                         tableBodyRow.appendChild(tableBodyRowTD) ;
 
                     });
-                    tableBodyRow.onclick=tableItem.onClick.bind(null,dataList,tableBodyRow);
+                    tableBodyRow.onclick=tableItem.onRowClick.bind(null,dataList,tableBodyRow);
                     tableBodyRow.className=tableItem.rowClassName;
                     htmlTable.appendChild(tableBodyRow);
 
