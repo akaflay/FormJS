@@ -4,13 +4,33 @@
         return new Form.init(options);
     };
     let parentElement;
+    let arrangment=[];
 
     Form.init = function (options) {
         let self = this;
         self.validate(options);
         self.init(options);
+        self.createHTML();
     };
     Form.prototype = {
+
+        createHTML:function(){
+            //Create Form
+            let formElem = document.createElement("form");
+            if(arrangment.length>0){
+                arrangment.forEach(item=>formElem.appendChild(item));
+            }
+            parentElement.appendChild(formElem);
+
+        },
+        addElementToArrangment:function(index,element){
+
+            if(arrangment[index]){
+                arrangment.push(element);
+            }else{
+                arrangment[index]=element;
+            }
+        },
 
         validate: function (options) {
             if (!options.selector)
@@ -26,14 +46,13 @@
         },
 
         init: function (options) {
-
-            //Create Form
-            let formElem = document.createElement("form");
+            let self=this;
 
             //For each input options loop and create inner items
             if (Array.isArray(options.input)) {
 
                 options.input.forEach(function (val) {
+
 
                     //Create outer div
                     let div = document.createElement("div");
@@ -43,7 +62,7 @@
                     let label = document.createElement("div");
                     label.innerText = val.label;
                     label.classList.add('float-left');
-                    label.classList.add(val.className);
+                    label.classList.add(val.lableClassName);
 
                     //Create Input div
                     let inputItemDiv = document.createElement("div");
@@ -93,29 +112,83 @@
                     div.appendChild(label);
                     div.appendChild(inputItemDiv);
 
-                    //Add outer div to form
-                    formElem.appendChild(div);
+                    //Add outer div to the arrangment array
+                    self.addElementToArrangment(val.index,div);
                 });
 
             }
             if (options.buttons && Array.isArray(options.buttons)) {
-                options.buttons.forEach(function (item) {
-                    let div = document.createElement("div");
-                    let button = document.createElement('button');
-                    button.innerText = item.value;
-                    button.className = item.className;
-                    button.onclick = item.onSubmit;
-                    div.appendChild(button);
-                    formElem.appendChild(div);
-                });
+                this.createButton(options.buttons);
 
             }
 
-            //Get the selected div and append the form to it
+            if (options.tables && Array.isArray(options.tables)) {
+                this.createTable(options.tables);
 
-            parentElement.appendChild(formElem);
+            }
+
+
+
+        },
+        createTable:function(table){
+            let self=this;
+
+            table.forEach(function (tableItem) {
+                let div = document.createElement("div");
+                div.classList.add('each-form-section');
+                let label=document.createElement("div");
+                label.innerText=tableItem.label;
+                label.className=tableItem.labelClassName;
+                div.appendChild(label);
+                let htmlTable = document.createElement('table');
+                htmlTable.className=tableItem.className;
+                let tableHeaderRow=document.createElement('tr');
+                tableItem.header.forEach(function (item) {
+                        let tableHeaderRowTD=document.createElement('th');
+                        tableHeaderRowTD.innerText=item;
+                        tableHeaderRow.appendChild(tableHeaderRowTD) ;
+                    });
+                htmlTable.appendChild(tableHeaderRow);
+
+
+
+                tableItem.data.forEach(function (dataList) {
+                    let tableBodyRow=document.createElement('tr');
+                    tableItem.header.forEach(function(item){
+                        let tableBodyRowTD=document.createElement('td');
+                        tableBodyRowTD.innerText=dataList[item];
+                        tableBodyRow.appendChild(tableBodyRowTD) ;
+
+                    });
+                    tableBodyRow.onclick=tableItem.onClick.bind(null,dataList,tableBodyRow);
+                    tableBodyRow.className=tableItem.rowClassName;
+                    htmlTable.appendChild(tableBodyRow);
+
+
+                });
+
+
+                div.appendChild(htmlTable);
+                self.addElementToArrangment(tableItem.index,div);
+            });
+
+        },
+
+        createButton:function(buttons){
+            let self=this;
+            buttons.forEach(function (item) {
+                let div = document.createElement("div");
+                let button = document.createElement('button');
+                button.innerText = item.value;
+                button.className = item.className;
+                button.onclick = item.onSubmit;
+                div.appendChild(button);
+                self.addElementToArrangment(item.index,div);
+            });
 
         }
+
+
 
 
     };
