@@ -67,7 +67,7 @@ $F({
         rowClassName:'house-hover',
         header:["id","value"],
         data:[{id:"1",value:'Angad'},{id:"2",value:"Nutan"},{id:"3",value:"Niveeta"}],
-        onClick:function (row,object) {
+        onRowClick:function (row,object) {
             tableRowSelected=row;
             let tables = document.getElementsByClassName("table");
             for(let eachTable=0;eachTable<tables.length;eachTable++){
