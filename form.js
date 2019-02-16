@@ -30,7 +30,6 @@
         });
         htmlTable.appendChild(tableHeaderRow);
 
-
         table.data.forEach(function (dataList) {
             let tableBodyRow = document.createElement('tr');
             table.header.forEach(function (item) {
@@ -45,7 +44,6 @@
 
 
         });
-
 
         div.appendChild(htmlTable);
         self.arrangeElements(table.index, div);
@@ -74,8 +72,6 @@
         label.for = item;
         label.innerText = item;
         inputItemDiv.appendChild(label).appendChild(inputItem);
-
-
 
     };
 
@@ -145,7 +141,7 @@
 
 
     Form.prototype = {
-
+        
         createForm: function () {
             formElem = document.createElement("form");
             return this;
@@ -185,7 +181,6 @@
 
         createInput: function (inputs) {
             let self = this;
-
             //For each input options loop and create inner items
             if (inputs && Array.isArray(inputs)) {
 
@@ -193,11 +188,14 @@
                     createEachInput(self, val);
                 });
 
+            }else if(typeof  inputs ==='object'){
+                createEachInput(self,inputs);
+            }else{
+                throw "Invalid input type";
             }
-
             return self;
-
         },
+
         createTable: function (tables) {
             let self = this;
             if (tables && Array.isArray(tables)) {
@@ -206,6 +204,10 @@
                     createEachTable(self, tableItem);
 
                 });
+            }else if(typeof  tables ==='object'){
+                createEachTable(self,tables);
+            }else{
+                throw "Invalid table type";
             }
             return self;
 
@@ -218,6 +220,10 @@
                 buttons.forEach(function (item) {
                     createEachButton(self, item);
                 });
+            }else if(typeof  buttons ==='object'){
+                createEachButton(self,buttons);
+            }else{
+                throw "Invalid button type";
             }
             return self;
 
