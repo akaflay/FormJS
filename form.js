@@ -107,6 +107,7 @@
                                 inputItem.value = item;
                                 inputItem.id = item;
                                 let label = document.createElement('label');
+                                label.className=val.className;
                                 label.for = item;
                                 label.innerText = item;
                                 inputItemDiv.appendChild(label).appendChild(inputItem);
