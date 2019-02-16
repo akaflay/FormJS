@@ -1,7 +1,7 @@
 let tableRowSelected;
 $F({
     selector: "txt",
- }).createButton([{
+}).createButton([{
     index:4,
     value: 'Submit', className: 'btn bold', onSubmit: function (e) {
         e.preventDefault();
@@ -25,7 +25,7 @@ $F({
         }
 
 
-        let msg = `Options selected path <b>${path[0].value?path[0].value:installLatest[0].value}</b> and test to run <b>${testRunSelected}</b> and other option is <b>${otherOptionSelected}</b> and the table item selected <b>${JSON.stringify(tableRowSelected)}</b>`;
+        let msg = `Options selected path ${path[0].value?path[0].value:installLatest[0].value} and test to run ${testRunSelected} and other option is ${otherOptionSelected} and the table item selected ${JSON.stringify(tableRowSelected)}`;
         let result = document.getElementById("result");
         result.innerText = msg;
         //Yaha you have to make the call to the server
@@ -79,4 +79,3 @@ $F({
     }
 
 ]).createInput([{name: 'name', type: 'text', className: '', label: 'First Name',index:0,lableClassName:'bold'}]).createHTML();
-
