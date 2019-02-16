@@ -1,7 +1,7 @@
 let tableRowSelected;
 $F({
     selector: "txt",
-}).createButton([{
+}).createButton({
     index:4,
     value: 'Submit', className: 'btn bold', onSubmit: function (e) {
         e.preventDefault();
@@ -30,7 +30,7 @@ $F({
         result.innerText = msg;
         //Yaha you have to make the call to the server
     }
-}]).createTable([{
+}).createTable({
     label:'This is a table label',
     index:5,
     className:'table',
@@ -53,7 +53,7 @@ $F({
         console.log(tableRowSelected);
     }
 
-}]).createInput([
+}).createInput([
     {name: 'path', type: 'text', className: '', label: 'Path to private build or Jenkins build',index:1,lableClassName:'bold'},
     {name: 'installLatest', type: 'select', className: '', label: 'Or Install Latest',index:0,lableClassName:'bold',
         items: [
@@ -78,4 +78,4 @@ $F({
         ]
     }
 
-]).createInput([{name: 'name', type: 'text', className: '', label: 'First Name',index:0,lableClassName:'bold'}]).createHTML();
+]).createInput({name: 'name', type: 'text', className: '', label: 'First Name',index:0,lableClassName:'bold'}).createHTML();
