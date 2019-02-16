@@ -4,31 +4,37 @@
         return new Form.init(options);
     };
     let parentElement;
-    let arrangment=[];
+    let arrangement=[];
+    let formElem;
 
     Form.init = function (options) {
         let self = this;
         self.validate(options);
-        self.init(options);
-        self.createHTML();
+        return this;
     };
     Form.prototype = {
 
+        createForm:function(){
+            formElem = document.createElement("form");
+            return this;
+        },
+
         createHTML:function(){
-            //Create Form
-            let formElem = document.createElement("form");
-            if(arrangment.length>0){
-                arrangment.forEach(item=>formElem.appendChild(item));
+            if(!formElem) this.createForm();
+
+            if(arrangement.length>0){
+                arrangement.forEach((item=>formElem.appendChild(item)));
             }
             parentElement.appendChild(formElem);
 
         },
-        addElementToArrangment:function(index,element){
 
-            if(arrangment[index]){
-                arrangment.push(element);
+        arrangeElements:function(index, element){
+
+            if(arrangement[index]){
+                arrangement.push(element);
             }else{
-                arrangment[index]=element;
+                arrangement[index]=element;
             }
         },
 
@@ -45,13 +51,13 @@
 
         },
 
-        init: function (options) {
+        createInput: function (inputs) {
             let self=this;
 
             //For each input options loop and create inner items
-            if (Array.isArray(options.input)) {
+            if (inputs && Array.isArray(inputs)) {
 
-                options.input.forEach(function (val) {
+                inputs.forEach(function (val) {
 
 
                     //Create outer div
@@ -113,78 +119,78 @@
                     div.appendChild(inputItemDiv);
 
                     //Add outer div to the arrangment array
-                    self.addElementToArrangment(val.index,div);
+                    self.arrangeElements(val.index,div);
                 });
 
             }
-            if (options.buttons && Array.isArray(options.buttons)) {
-                this.createButton(options.buttons);
-
-            }
-
-            if (options.tables && Array.isArray(options.tables)) {
-                this.createTable(options.tables);
-
-            }
 
 
+
+
+            return self;
 
         },
-        createTable:function(table){
+        createTable:function(tables){
             let self=this;
+            if (tables && Array.isArray(tables)) {
 
-            table.forEach(function (tableItem) {
-                let div = document.createElement("div");
-                div.classList.add('each-form-section');
-                let label=document.createElement("div");
-                label.innerText=tableItem.label;
-                label.className=tableItem.labelClassName;
-                div.appendChild(label);
-                let htmlTable = document.createElement('table');
-                htmlTable.className=tableItem.className;
-                let tableHeaderRow=document.createElement('tr');
-                tableItem.header.forEach(function (item) {
-                        let tableHeaderRowTD=document.createElement('th');
-                        tableHeaderRowTD.innerText=item;
-                        tableHeaderRow.appendChild(tableHeaderRowTD) ;
+                tables.forEach(function (tableItem) {
+                    let div = document.createElement("div");
+                    div.classList.add('each-form-section');
+                    let label = document.createElement("div");
+                    label.innerText = tableItem.label;
+                    label.className = tableItem.labelClassName;
+                    div.appendChild(label);
+                    let htmlTable = document.createElement('table');
+                    htmlTable.className = tableItem.className;
+                    let tableHeaderRow = document.createElement('tr');
+                    tableItem.header.forEach(function (item) {
+                        let tableHeaderRowTD = document.createElement('th');
+                        tableHeaderRowTD.innerText = item;
+                        tableHeaderRow.appendChild(tableHeaderRowTD);
                     });
-                htmlTable.appendChild(tableHeaderRow);
+                    htmlTable.appendChild(tableHeaderRow);
 
 
+                    tableItem.data.forEach(function (dataList) {
+                        let tableBodyRow = document.createElement('tr');
+                        tableItem.header.forEach(function (item) {
+                            let tableBodyRowTD = document.createElement('td');
+                            tableBodyRowTD.innerText = dataList[item];
+                            tableBodyRow.appendChild(tableBodyRowTD);
 
-                tableItem.data.forEach(function (dataList) {
-                    let tableBodyRow=document.createElement('tr');
-                    tableItem.header.forEach(function(item){
-                        let tableBodyRowTD=document.createElement('td');
-                        tableBodyRowTD.innerText=dataList[item];
-                        tableBodyRow.appendChild(tableBodyRowTD) ;
+                        });
+                        tableBodyRow.addEventListener('click', tableItem.onRowClick.bind(null, dataList, tableBodyRow));
+                        tableBodyRow.className = tableItem.rowClassName;
+                        htmlTable.appendChild(tableBodyRow);
+
 
                     });
-                    tableBodyRow.onclick=tableItem.onRowClick.bind(null,dataList,tableBodyRow);
-                    tableBodyRow.className=tableItem.rowClassName;
-                    htmlTable.appendChild(tableBodyRow);
 
 
+                    div.appendChild(htmlTable);
+                    self.arrangeElements(tableItem.index, div);
                 });
-
-
-                div.appendChild(htmlTable);
-                self.addElementToArrangment(tableItem.index,div);
-            });
+            }
+            return self;
 
         },
 
         createButton:function(buttons){
             let self=this;
-            buttons.forEach(function (item) {
-                let div = document.createElement("div");
-                let button = document.createElement('button');
-                button.innerText = item.value;
-                button.className = item.className;
-                button.onclick = item.onSubmit;
-                div.appendChild(button);
-                self.addElementToArrangment(item.index,div);
-            });
+            if (buttons && Array.isArray(buttons)) {
+
+                buttons.forEach(function (item) {
+                    let div = document.createElement("div");
+                    let button = document.createElement('button');
+                    button.innerText = item.value;
+                    button.className = item.className;
+                    button.addEventListener('click' , item.onSubmit);
+                    div.appendChild(button);
+                    self.arrangeElements(item.index, div);
+                });
+            }
+            return self;
 
         }
 
